@@ -1,25 +1,17 @@
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SignInScreen from '../screens/SignInScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
-const HomeStack = () => {
+const HomeScreen: React.FC = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen 
-        name="SignIn" 
-        component={SignInScreen} 
-        options={{ title: 'Employee Sign-In' }}
-      />
-      <Stack.Screen 
-        name="History" 
-        component={HistoryScreen} 
-        options={{ title: 'Sign-In History' }}
-      />
-    </Stack.Navigator>
+    <Tab.Navigator>
+      <Tab.Screen name="Sign In" component={SignInScreen} />
+      <Tab.Screen name="History" component={HistoryScreen} />
+    </Tab.Navigator>
   );
 };
 
-export default HomeStack;
+export default HomeScreen;

@@ -1,6 +1,12 @@
 import React from 'react';
-import { View, FlatList, Text } from 'react-native';
+import { View, FlatList, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
+import { useColorScheme, Colors } from '../../hooks/useColorScheme';
+
+
+
 
 interface SignInData {
   name: string;
@@ -8,7 +14,14 @@ interface SignInData {
 }
 
 const HistoryScreen = () => {
+  const navigation = useNavigation();
+  const colorScheme = useColorScheme() || 'light';
+  const colors = Colors[colorScheme as keyof typeof Colors];
+
   const [signIns, setSignIns] = React.useState<SignInData[]>([]);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+
 
   React.useEffect(() => {
     loadSignIns();
@@ -40,13 +53,25 @@ const HistoryScreen = () => {
     </View>
   );
 
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await loadSignIns();
+    setRefreshing(false);
+  };
+
   return (
-    <View style={{ padding: 20 }}>
-      <Text style={{ 
-        fontSize: 18, 
-        fontWeight: 'bold', 
-        marginBottom: 20
-      }}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={24} color={colors.primary} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleRefresh} style={styles.refreshButton}>
+          <Ionicons name="refresh" size={24} color={colors.primary} />
+        </TouchableOpacity>
+      </View>
+
+      <Text style={[styles.title, { color: colors.text }]}>
+
         Sign-In History ({signIns.length} people)
       </Text>
       
@@ -55,7 +80,8 @@ const HistoryScreen = () => {
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         ListEmptyComponent={
-          <Text style={{ textAlign: 'center', marginTop: 20, color: '#666' }}>
+          <Text style={[styles.emptyText, { color: colors.text }]}>
+
             No sign-ins yet
           </Text>
         }
@@ -63,5 +89,33 @@ const HistoryScreen = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  refreshButton: {
+    padding: 8,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  emptyText: {
+    textAlign: 'center',
+    marginTop: 20,
+    opacity: 0.6,
+  },
+});
+
+
 
 export default HistoryScreen;
