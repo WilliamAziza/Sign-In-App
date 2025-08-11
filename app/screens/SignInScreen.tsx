@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Alert, Text, StyleSheet } from 'react-native';
+import { View, TextInput, Button, Alert, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useColorScheme } from 'react-native';
 import { Colors } from '../../constants/Colors';
 
@@ -163,50 +163,121 @@ const SignInScreen = ({ navigation }: Props) => {
       padding: 20,
       backgroundColor: Colors[colorScheme ?? 'light'].background,
     },
+    headerSection: {
+      alignItems: 'center',
+      marginBottom: 30,
+      marginTop: 40,
+    },
+    title: {
+      fontSize: 28,
+      fontWeight: 'bold',
+      color: Colors[colorScheme ?? 'light'].text,
+      marginBottom: 8,
+    },
+    subtitle: {
+      fontSize: 16,
+      color: Colors[colorScheme ?? 'light'].tabIconDefault,
+      opacity: 0.8,
+    },
+    formCard: {
+      backgroundColor: Colors[colorScheme ?? 'light'].background,
+      borderRadius: 15,
+      padding: 25,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 8,
+      elevation: 5,
+    },
+    label: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: Colors[colorScheme ?? 'light'].text,
+      marginBottom: 8,
+    },
     input: {
       borderWidth: 1,
-      padding: 10,
-      borderRadius: 5,
+      padding: 15,
+      borderRadius: 10,
       marginBottom: 20,
       borderColor: Colors[colorScheme ?? 'light'].tabIconDefault,
       color: Colors[colorScheme ?? 'light'].text,
       backgroundColor: Colors[colorScheme ?? 'light'].background,
-
+      fontSize: 16,
+    },
+    signInButton: {
+      backgroundColor: '#007AFF',
+      paddingVertical: 15,
+      borderRadius: 10,
+      alignItems: 'center',
+      marginBottom: 15,
+    },
+    disabledButton: {
+      backgroundColor: '#C7C7CC',
+    },
+    signInButtonText: {
+      color: 'white',
+      fontSize: 18,
+      fontWeight: '600',
+    },
+    historyButton: {
+      backgroundColor: Colors[colorScheme ?? 'light'].tabIconDefault,
+      paddingVertical: 15,
+      borderRadius: 10,
+      alignItems: 'center',
+      marginTop: 20,
+    },
+    historyButtonText: {
+      color: Colors[colorScheme ?? 'light'].text,
+      fontSize: 16,
+      fontWeight: '600',
     },
     errorText: {
-      color: Colors[colorScheme ?? 'light'].tabIconSelected,
-
+      color: '#FF3B30',
       marginTop: 10,
       textAlign: 'center',
+      fontSize: 14,
     },
   });
 
   return (
     <View style={styles.container}>
-      <TextInput
-        placeholder="Enter your employee ID"
-        placeholderTextColor={Colors[colorScheme ?? 'light'].tabIconDefault}
-        value={employeeId}
-        onChangeText={setEmployeeId}
-        style={styles.input}
-        keyboardType="default"
-        autoCapitalize="none"
-      />
-      
-      <TextInput
-        placeholder="Enter your name"
-        placeholderTextColor={Colors[colorScheme ?? 'light'].tabIconDefault}
-        value={name}
-        onChangeText={setName}
-        style={styles.input}
-      />
+      <View style={styles.headerSection}>
+        <Text style={styles.title}>Employee Sign-In</Text>
+        <Text style={styles.subtitle}>Track your daily attendance</Text>
+      </View>
 
-      <View style={{ marginBottom: 20 }}>
-        <Button 
-          title={isSyncing ? "Signing In..." : "Sign In"} 
+      <View style={styles.formCard}>
+        <Text style={styles.label}>Employee ID</Text>
+        <TextInput
+          placeholder="Enter your employee ID"
+          placeholderTextColor={Colors[colorScheme ?? 'light'].tabIconDefault}
+          value={employeeId}
+          onChangeText={setEmployeeId}
+          style={styles.input}
+          keyboardType="default"
+          autoCapitalize="none"
+        />
+        
+        <Text style={styles.label}>Full Name</Text>
+        <TextInput
+          placeholder="Enter your full name"
+          placeholderTextColor={Colors[colorScheme ?? 'light'].tabIconDefault}
+          value={name}
+          onChangeText={setName}
+          style={styles.input}
+        />
+
+        <TouchableOpacity 
+          style={[styles.signInButton, isSyncing && styles.disabledButton]} 
           onPress={handleSignIn} 
           disabled={isSyncing}
-        />
+        >
+          <Text style={styles.signInButtonText}>
+            {isSyncing ? "Signing In..." : "Sign In Now"}
+          </Text>
+        </TouchableOpacity>
+
         {syncError && (
           <Text style={styles.errorText}>
             {syncError}
@@ -214,10 +285,12 @@ const SignInScreen = ({ navigation }: Props) => {
         )}
       </View>
 
-      <Button 
-        title="View Sign-In History" 
+      <TouchableOpacity 
+        style={styles.historyButton}
         onPress={() => navigation.navigate('History')}
-      />
+      >
+        <Text style={styles.historyButtonText}>📊 View Sign-In History</Text>
+      </TouchableOpacity>
     </View>
   );
 };

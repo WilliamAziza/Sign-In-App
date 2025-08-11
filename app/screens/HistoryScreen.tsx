@@ -47,33 +47,57 @@ const HistoryScreen = () => {
 
   const renderItem = ({ item }: { item: SignInData }) => (
     <View style={{ 
-      padding: 15, 
-      borderBottomWidth: 1, 
-      borderBottomColor: '#ccc',
-      marginBottom: 5,
+      padding: 20, 
+      marginBottom: 10,
       backgroundColor: item.isLate ? '#ffebee' : '#e8f5e8',
-      borderRadius: 8,
-      marginHorizontal: 10,
-      marginVertical: 5
+      borderRadius: 15,
+      marginHorizontal: 15,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 3,
     }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <View>
-          <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{item.name}</Text>
-          <Text style={{ color: '#666', fontSize: 14 }}>ID: {item.employeeId}</Text>
-          <Text style={{ color: '#666', fontSize: 12 }}>{item.timestamp}</Text>
+        <View style={{ flex: 1 }}>
+          <Text style={{ 
+            fontWeight: 'bold', 
+            fontSize: 18, 
+            color: colors.text,
+            marginBottom: 4
+          }}>
+            {item.name}
+          </Text>
+          <Text style={{ 
+            color: colors.tabIconDefault, 
+            fontSize: 16,
+            marginBottom: 2
+          }}>
+            ID: {item.employeeId}
+          </Text>
+          <Text style={{ 
+            color: colors.tabIconDefault, 
+            fontSize: 14,
+            opacity: 0.8
+          }}>
+            {item.timestamp}
+          </Text>
         </View>
         <View style={{ 
-          backgroundColor: item.isLate ? '#f44336' : '#4caf50',
-          paddingHorizontal: 10,
-          paddingVertical: 5,
-          borderRadius: 15
+          backgroundColor: item.isLate ? '#FF3B30' : '#34C759',
+          paddingHorizontal: 15,
+          paddingVertical: 8,
+          borderRadius: 20,
+          minWidth: 80,
+          alignItems: 'center'
         }}>
           <Text style={{ 
             color: 'white', 
-            fontSize: 12, 
-            fontWeight: 'bold' 
+            fontSize: 14, 
+            fontWeight: 'bold',
+            textAlign: 'center'
           }}>
-            {item.isLate ? `LATE (${item.lateByMinutes} min)` : 'ON TIME'}
+            {item.isLate ? `LATE\n${item.lateByMinutes} min` : 'ON TIME'}
           </Text>
         </View>
       </View>
